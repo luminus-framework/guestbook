@@ -1,0 +1,23 @@
+{% extends "guestbook/views/templates/base.html" %}
+
+{% block content %}
+<ul>
+{% for item in messages %}
+  <li> 
+      <blockquote>{{item.message}}</blockquote>
+      <p> - {{item.name}}</p>
+      <time>{{item.timestamp}}</time>
+  </li>
+{% endfor %}
+</ul>
+
+{% if error %}
+<p>{{error}}</p>
+{% endif %}
+
+<form action="/" method="POST">
+    <p>Name: <input type="text" name="name" value={{name}}></p>
+    <p>Message: <input type="text" name="message" value={{message}}></p>
+    <input type="submit" value="comment">
+</form>
+{% endblock %}
