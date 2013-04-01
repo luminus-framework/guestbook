@@ -53,3 +53,12 @@ h1 {
 	border: 1px solid #CFCFCF;
 	border-radius: 4px;
 }
+
+form {
+    width: 200px;
+    clear: both;
+}
+form input {
+    width: 50%;
+    clear: both;
+}
