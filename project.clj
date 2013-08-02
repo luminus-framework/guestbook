@@ -7,7 +7,7 @@
    [com.taoensso/timbre "1.5.2"]
    [com.taoensso/tower "1.2.0"]
    [markdown-clj "0.9.19"]
-   [selmer "0.3.0"]
+   [selmer "0.3.1"]
    [org.clojure/java.jdbc "0.2.3"]
    [com.h2database/h2 "1.3.170"]
    [korma "0.3.0-RC2"]
