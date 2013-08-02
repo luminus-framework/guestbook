@@ -1,6 +1,6 @@
 (ns guestbook.views.layout
   (:use noir.request)
-  (:require [clabango.parser :as parser]))
+  (:require [selmer.parser :as parser]))
 
 (def template-path "guestbook/views/templates/")
 
