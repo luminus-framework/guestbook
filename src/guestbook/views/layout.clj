@@ -1,7 +1,7 @@
 (ns guestbook.views.layout
-  (:use noir.request)
   (:require [selmer.parser :as parser]
-    [ring.util.response :refer [content-type response]]))
+            [ring.util.response :refer [content-type response]])
+  (:import compojure.response.Renderable))
 
 (def template-path "guestbook/views/templates/")
 
