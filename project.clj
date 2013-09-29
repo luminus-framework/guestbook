@@ -1,16 +1,16 @@
 (defproject guestbook "0.1.0-SNAPSHOT"
   :dependencies 
   [[org.clojure/clojure "1.5.0"]
-   [lib-noir "0.6.9"]
+   [lib-noir "0.7.0"]
    [compojure "1.1.5"]
-   [ring-server "0.2.8"]
+   [ring-server "0.3.0"]
+   [selmer "0.4.3"]
    [com.taoensso/timbre "2.6.2"]
-   [com.taoensso/tower "1.2.0"]
+   [com.postspectacular/rotor "0.1.0"]
+   [com.taoensso/tower "1.7.1"]
    [markdown-clj "0.9.33"]
-   [selmer "0.4.2"]
-   [org.clojure/java.jdbc "0.2.3"]
    [com.h2database/h2 "1.3.170"]
-   [korma "0.3.0-RC2"]
+   [korma "0.3.0-RC5"]
    [log4j
     "1.2.15"
     :exclusions
