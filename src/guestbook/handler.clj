@@ -25,11 +25,12 @@
   (println "shutting down..."))
 
 ;;append your application routes to the all-routes vector
-(def all-routes [home-routes app-routes])
-
-(def app (-> all-routes
-             middleware/app-handler
-             ;;add your middlewares here
-             ))
-
-(def war-handler (middleware/war-handler app))
+(def app
+ (middleware/app-handler
+   [auth-routes home-routes app-routes]
+   :middleware
+   []
+   :access-rules
+   []
+   :formats
+   [:json-kw :edn]))
