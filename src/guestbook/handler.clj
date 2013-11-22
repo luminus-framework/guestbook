@@ -31,8 +31,11 @@
     [:shared-appender-config :rotor]
     {:path "guestbook.log" :max-size (* 512 1024) :backlog 10})
 
-  (if-not (schema/initialized?) (schema/create-tables))
   (if (env :selmer-dev) (parser/cache-off!))
+  
+  ;;initialize the database if needed
+  (if-not (schema/initialized?) (schema/create-tables))
+  
   (timbre/info "guestbook started successfully"))
 
 (defn destroy
