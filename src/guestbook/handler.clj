@@ -1,9 +1,12 @@
-(ns guestbook.handler
-  (:use guestbook.routes.home
-        compojure.core)
-  (:require [noir.util.middleware :as middleware]
+(ns guestbook.handler  
+  (:require [compojure.core :refer [defroutes]]            
+            [guestbook.routes.home :refer [home-routes]]
+            [noir.util.middleware :as middleware]
             [compojure.route :as route]
-            [guestbook.models.schema :as schema]))
+            [taoensso.timbre :as timbre]
+            [com.postspectacular.rotor :as rotor]
+            [selmer.parser :as parser]
+            [environ.core :refer [env]]))
 
 (defroutes app-routes
   (route/resources "/")
@@ -15,22 +18,49 @@
    an app server such as Tomcat
    put any initialization code here"
   []
+  (timbre/set-config!
+    [:appenders :rotor]
+    {:min-level :info
+     :enabled? true
+     :async? false ; should be always false for rotor
+     :max-message-per-msecs nil
+     :fn rotor/append})
+
+  (timbre/set-config!
+    [:shared-appender-config :rotor]
+    {:path "guestbook.log" :max-size (* 512 1024) :backlog 10})
+
   (if-not (schema/initialized?) (schema/create-tables))
-  (println "guestbook started successfully..."))
+  (if (env :selmer-dev) (parser/cache-off!))
+  (timbre/info "guestbook started successfully"))
 
 (defn destroy
   "destroy will be called when your application
    shuts down, put any clean up code here"
   []
-  (println "shutting down..."))
+  (timbre/info "guestbook is shutting down..."))
 
-;;append your application routes to the all-routes vector
-(def app
- (middleware/app-handler
-   [auth-routes home-routes app-routes]
-   :middleware
-   []
-   :access-rules
-   []
-   :formats
-   [:json-kw :edn]))
+(defn template-error-page [handler]
+  (if (env :selmer-dev)
+    (fn [request]
+      (try
+        (handler request)
+        (catch clojure.lang.ExceptionInfo ex
+          (let [{:keys [type error-template] :as data} (ex-data ex)]
+            (if (= :selmer-validation-error type)
+              {:status 500
+               :body (parser/render error-template data)}
+              (throw ex))))))
+    handler))
+
+(def app (middleware/app-handler
+           ;; add your application routes here
+           [home-routes app-routes]
+           ;; add custom middleware here
+           :middleware [template-error-page]
+           ;; add access rules here
+           :access-rules []
+           ;; serialize/deserialize the following data formats
+           ;; available formats:
+           ;; :json :json-kw :yaml :yaml-kw :edn :yaml-in-html
+           :formats [:json-kw :edn]))
