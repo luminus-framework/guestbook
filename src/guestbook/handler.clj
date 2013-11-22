@@ -1,6 +1,7 @@
 (ns guestbook.handler  
   (:require [compojure.core :refer [defroutes]]            
             [guestbook.routes.home :refer [home-routes]]
+            [guestbook.models.schema :as schema]
             [noir.util.middleware :as middleware]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
