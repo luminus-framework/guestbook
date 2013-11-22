@@ -1,5 +1,5 @@
-(ns guestbook.handler  
-  (:require [compojure.core :refer [defroutes]]            
+(ns guestbook.handler
+  (:require [compojure.core :refer [defroutes]]
             [guestbook.routes.home :refer [home-routes]]
             [guestbook.models.schema :as schema]
             [noir.util.middleware :as middleware]
@@ -32,10 +32,10 @@
     {:path "guestbook.log" :max-size (* 512 1024) :backlog 10})
 
   (if (env :selmer-dev) (parser/cache-off!))
-  
+
   ;;initialize the database if needed
   (if-not (schema/initialized?) (schema/create-tables))
-  
+
   (timbre/info "guestbook started successfully"))
 
 (defn destroy

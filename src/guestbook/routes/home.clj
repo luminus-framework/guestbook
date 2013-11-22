@@ -6,25 +6,25 @@
 
 (defn home-page [& [name message error]]
   (layout/render "home.html"
-               {:error    error
-                :name     name
-                :message  message
-                :messages (db/get-messages)}))
+                 {:error    error
+                  :name     name
+                  :message  message
+                  :messages (db/get-messages)}))
 
 (defn save-message [name message]
   (cond
-  
+
     (empty? name)
-    (home-page name message "Some dummy who forgot to leave a name")
-  
+    (home-page name message "Somebody forgot to leave a name")
+
     (empty? message)
     (home-page name message "Don't you have something to say?")
-  
+
     :else
     (do
       (db/save-message name message)
       (home-page))))
-                        
+
 (defn about-page []
   (layout/render "about.html"))
 

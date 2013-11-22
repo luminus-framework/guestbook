@@ -9,7 +9,7 @@
               :subname (str (io/resource-path) db-store)
               :user "sa"
               :password ""
-              :naming {:keys clojure.string/upper-case
+              :naming {:keys clojure.string/lower-case
                        :fields clojure.string/upper-case}})
 (defn initialized?
   "checks to see if the database schema is present"
@@ -27,7 +27,7 @@
       [:message "varchar(200)"])
     (sql/do-commands
       "CREATE INDEX timestamp_index ON guestbook (timestamp)")))
-      
+
 (defn create-tables
   "creates the database tables used by the application"
   []
