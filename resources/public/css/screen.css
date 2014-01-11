@@ -63,7 +63,8 @@ textarea {
 }
 
 .jumbotron {
-position: relative;
+  position: relative;
+  background: white;
 	z-index: 2;
 	border-top: 1px dotted #adadad;
 }
