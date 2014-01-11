@@ -6,10 +6,10 @@
    [ring-server "0.3.1"]
    [environ "0.4.0"]
    [com.taoensso/timbre "2.7.1"]
-   [markdown-clj "0.9.35"]
+   [markdown-clj "0.9.40"]
    [korma "0.3.0-RC6"]
    [com.taoensso/tower "2.0.0"]
-   [selmer "0.5.3"]
+   [selmer "0.5.7"]
    [org.clojure/clojure "1.5.1"]
    [log4j
     "1.2.17"
@@ -19,7 +19,7 @@
      com.sun.jdmk/jmxtools
      com.sun.jmx/jmxri]]
    [compojure "1.1.6"]
-   [lib-noir "0.7.6"]
+   [lib-noir "0.7.9"]
    [com.postspectacular/rotor "0.1.0"]]
   :ring
   {:handler guestbook.handler/app,
