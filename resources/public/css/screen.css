@@ -1,9 +1,8 @@
 html,
 body {
 	height: 100%;
-  padding-top: 70px;
-
-  font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	padding-top: 70px;
+	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	line-height: 1.4em;
 	background: #eaeaea;
 	color: #4d4d4d;
@@ -32,7 +31,7 @@ input[type=submit] {
 }
 
 input[type=submit], textarea {
-  font-size: 24px;
+	font-size: 24px;
 	font-family: inherit;
 	line-height: 1.4em;
 	border: 0;
@@ -53,7 +52,7 @@ input[type=submit], textarea {
 }
 
 input[type=submit]:hover {
-  background: rgba(0, 0, 0, 0.15);
+	background: rgba(0, 0, 0, 0.15);
 	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.3);
 }
 
@@ -64,12 +63,12 @@ textarea {
 }
 
 .error {
-    color: red;
+	color: red;
 }
 
 .jumbotron {
-  position: relative;
-  background: white;
+	position: relative;
+	background: white;
 	z-index: 2;
 	border-top: 1px dotted #adadad;
 }
@@ -98,7 +97,7 @@ ul {
 li {
 	position: relative;
 	font-size: 16px;
-  padding-top: 5px;
+	padding-top: 5px;
 	border-bottom: 1px dotted #ccc;
 }
 
@@ -130,20 +129,20 @@ form:before {
 }
 
 form {
-  width: 520px;
-  clear: both;
-  padding: 30px;
-  margin-bottom: 50px;
-  background: #fff;
+	width: 520px;
+	clear: both;
+	padding: 30px;
+	margin-bottom: 50px;
+	background: #fff;
 	background: rgba(255, 255, 255, 0.9);
 	border: 1px solid #ccc;
 	position: relative;
 	border-top-left-radius: 2px;
 	border-top-right-radius: 2px;
 	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2),
-				0 25px 50px 0 rgba(0, 0, 0, 0.15);
+	            0 25px 50px 0 rgba(0, 0, 0, 0.15);
 }
 form input {
-    width: 50%;
-    clear: both;
+	width: 50%;
+	clear: both;
 }
