@@ -114,10 +114,25 @@ li time {
 	transition: color 0.4s;
 }
 
+
+form:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 15px;
+	z-index: 2;
+	border-bottom: 1px solid #6c615c;
+	background: #8d7d77;
+	border-top-left-radius: 1px;
+	border-top-right-radius: 1px;
+}
+
 form {
   width: 520px;
   clear: both;
-  padding: 10px;
+  padding: 30px;
   margin-bottom: 50px;
   background: #fff;
 	background: rgba(255, 255, 255, 0.9);
