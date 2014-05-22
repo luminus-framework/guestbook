@@ -1,11 +1,11 @@
 (ns guestbook.handler
   (:require [compojure.core :refer [defroutes]]
             [guestbook.routes.home :refer [home-routes]]
-            [guestbook.models.schema :as schema]
+            [guestbook.db.schema :as schema]
             [noir.util.middleware :as middleware]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
-            [com.postspectacular.rotor :as rotor]
+            [taoensso.timbre.appenders.rotor :as rotor]
             [selmer.parser :as parser]
             [environ.core :refer [env]]))
 
@@ -25,13 +25,13 @@
      :enabled? true
      :async? false ; should be always false for rotor
      :max-message-per-msecs nil
-     :fn rotor/append})
+     :fn rotor/appender-fn})
 
   (timbre/set-config!
     [:shared-appender-config :rotor]
     {:path "guestbook.log" :max-size (* 512 1024) :backlog 10})
 
-  (if (env :selmer-dev) (parser/cache-off!))
+  (if (env :dev) (parser/cache-off!))
 
   ;;initialize the database if needed
   (if-not (schema/initialized?) (schema/create-tables))
@@ -45,7 +45,7 @@
   (timbre/info "guestbook is shutting down..."))
 
 (defn template-error-page [handler]
-  (if (env :selmer-dev)
+  (if (env :dev)
     (fn [request]
       (try
         (handler request)

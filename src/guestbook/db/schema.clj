@@ -1,4 +1,4 @@
-(ns guestbook.models.schema
+(ns guestbook.db.schema
   (:require [clojure.java.jdbc :as sql]
             [noir.io :as io]))
 
@@ -17,15 +17,15 @@
   (.exists (new java.io.File (str (io/resource-path) db-store ".h2.db"))))
 
 (defn create-guestbook-table []
-  (sql/with-connection
+  (sql/db-do-commands
     db-spec
-    (sql/create-table
+    (sql/create-table-ddl
       :guestbook
       [:id "INTEGER PRIMARY KEY AUTO_INCREMENT"]
       [:timestamp :timestamp]
       [:name "varchar(30)"]
       [:message "varchar(200)"])
-    (sql/do-commands
+    (sql/db-do-prepared
       "CREATE INDEX timestamp_index ON guestbook (timestamp)")))
 
 (defn create-tables

@@ -1,8 +1,8 @@
 (ns guestbook.routes.home
   (:use compojure.core)
-  (:require [guestbook.views.layout :as layout]
+  (:require [guestbook.layout :as layout]
             [guestbook.util :as util]
-            [guestbook.models.db :as db]))
+            [guestbook.db.core :as db]))
 
 (defn home-page [& [name message error]]
   (layout/render "home.html"

@@ -1,4 +1,4 @@
-(ns guestbook.views.layout
+(ns guestbook.layout
   (:require [selmer.parser :as parser]
             [clojure.string :as s]
             [ring.util.response :refer [content-type response]]
