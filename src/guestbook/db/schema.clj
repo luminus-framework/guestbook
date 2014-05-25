@@ -24,9 +24,9 @@
       [:id "INTEGER PRIMARY KEY AUTO_INCREMENT"]
       [:timestamp :timestamp]
       [:name "varchar(30)"]
-      [:message "varchar(200)"])
-    (sql/db-do-prepared
-      "CREATE INDEX timestamp_index ON guestbook (timestamp)")))
+      [:message "varchar(200)"]))
+  (sql/db-do-prepared db-spec
+      "CREATE INDEX timestamp_index ON guestbook (timestamp)"))
 
 (defn create-tables
   "creates the database tables used by the application"
