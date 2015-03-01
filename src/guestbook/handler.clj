@@ -1,15 +1,19 @@
 (ns guestbook.handler
-  (:require [compojure.core :refer [defroutes]]
+  (:require [compojure.core :refer [defroutes routes]]
             [guestbook.routes.home :refer [home-routes]]
-            [guestbook.db.schema :as schema]
-            [noir.util.middleware :as middleware]
+            [guestbook.middleware
+             :refer [development-middleware
+                     production-middleware]]
+            [guestbook.session :as session]
+            [ring.middleware.defaults :refer [site-defaults]]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.rotor :as rotor]
             [selmer.parser :as parser]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [cronj.core :as cronj]))
 
-(defroutes app-routes
+(defroutes base-routes
   (route/resources "/")
   (route/not-found "Not Found"))
 
@@ -32,39 +36,22 @@
     {:path "guestbook.log" :max-size (* 512 1024) :backlog 10})
 
   (if (env :dev) (parser/cache-off!))
-
-  ;;initialize the database if needed
-  (if-not (schema/initialized?) (schema/create-tables))
-
-  (timbre/info "guestbook started successfully"))
+  ;;start the expired session cleanup job
+  (cronj/start! session/cleanup-job)
+  (timbre/info "\n-=[ guestbook started successfully"
+               (when (env :dev) "using the development profile") "]=-"))
 
 (defn destroy
   "destroy will be called when your application
    shuts down, put any clean up code here"
   []
-  (timbre/info "guestbook is shutting down..."))
+  (timbre/info "guestbook is shutting down...")
+  (cronj/shutdown! session/cleanup-job)
+  (timbre/info "shutdown complete!"))
 
-(defn template-error-page [handler]
-  (if (env :dev)
-    (fn [request]
-      (try
-        (handler request)
-        (catch clojure.lang.ExceptionInfo ex
-          (let [{:keys [type error-template] :as data} (ex-data ex)]
-            (if (= :selmer-validation-error type)
-              {:status 500
-               :body (parser/render error-template data)}
-              (throw ex))))))
-    handler))
-
-(def app (middleware/app-handler
-           ;; add your application routes here
-           [home-routes app-routes]
-           ;; add custom middleware here
-           :middleware [template-error-page]
-           ;; add access rules here
-           :access-rules []
-           ;; serialize/deserialize the following data formats
-           ;; available formats:
-           ;; :json :json-kw :yaml :yaml-kw :edn :yaml-in-html
-           :formats [:json-kw :edn]))
+(def app
+  (-> (routes
+        home-routes
+        base-routes)
+      development-middleware
+      production-middleware))

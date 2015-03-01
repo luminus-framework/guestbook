@@ -1,34 +1,37 @@
 (ns guestbook.routes.home
-  (:use compojure.core)
   (:require [guestbook.layout :as layout]
-            [guestbook.util :as util]
-            [guestbook.db.core :as db]))
+            [compojure.core :refer [defroutes GET POST]]
+            [ring.util.response :refer [redirect]]
+            [guestbook.db.core :as db]
+            [bouncer.core :as b]
+            [bouncer.validators :as v]))
 
-(defn home-page [& [name message error]]
-  (layout/render "home.html"
-                 {:error    error
-                  :name     name
-                  :message  message
-                  :messages (db/get-messages)}))
+(defn home-page [{:keys [flash]}]
+  (layout/render
+   "home.html"
+   (merge {:messages (db/get-messages)}
+          (select-keys flash [:name :message :errors]))
+   :name (:name flash)))
 
-(defn save-message [name message]
-  (cond
+(defn validate-message [params]
+  (first
+    (b/validate
+      params
+      :name v/required
+      :message [v/required [v/min-count 10]])))
 
-    (empty? name)
-    (home-page name message "Somebody forgot to leave a name")
-
-    (empty? message)
-    (home-page name message "Don't you have something to say?")
-
-    :else
+(defn save-message! [{:keys [params]}]
+  (if-let [errors (validate-message params)]
+    (-> (redirect "/")
+        (assoc :flash (assoc params :errors errors)))
     (do
-      (db/save-message name message)
-      (home-page))))
+      (db/save-message! (assoc params :timestamp (java.util.Date.)))
+      (redirect "/"))))
 
 (defn about-page []
   (layout/render "about.html"))
 
 (defroutes home-routes
-  (GET "/" [] (home-page))
-  (POST "/" [name message] (save-message name message))
+  (GET "/" request (home-page request))
+  (POST "/" request (save-message! request))
   (GET "/about" [] (about-page)))

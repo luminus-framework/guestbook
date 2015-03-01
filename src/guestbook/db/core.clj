@@ -1,18 +1,16 @@
 (ns guestbook.db.core
-  (:use korma.core
-        [korma.db :only (defdb)])
-  (:require [guestbook.db.schema :as schema]))
+  (:require
+    [yesql.core :refer [defqueries]]
+    [clojure.java.io :as io]))
 
-(defdb db schema/db-spec)
+(def db-store (str (.getName (io/file ".")) "/site.db"))
 
-(defentity guestbook)
+(def db-spec
+  {:classname   "org.h2.Driver"
+   :subprotocol "h2"
+   :subname     db-store
+   :make-pool?  true
+   :naming      {:keys   clojure.string/lower-case
+                 :fields clojure.string/upper-case}})
 
-(defn save-message
-  [name message]
-  (insert guestbook
-          (values {:name name
-                   :message message
-                   :timestamp (new java.util.Date)})))
-
-(defn get-messages []
-  (select guestbook))
+(defqueries "sql/queries.sql" {:connection db-spec})
