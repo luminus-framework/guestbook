@@ -10,8 +10,7 @@
   (layout/render
    "home.html"
    (merge {:messages (db/get-messages)}
-          (select-keys flash [:name :message :errors]))
-   :name (:name flash)))
+          (select-keys flash [:name :message :errors]))))
 
 (defn validate-message [params]
   (first
