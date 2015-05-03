@@ -19,4 +19,3 @@
       :handler (fn [_ _] (clear-expired-sessions))
       :schedule "* /30 * * * * *"
       :opts {}}]))
-
