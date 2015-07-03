@@ -1,23 +1,20 @@
 (ns guestbook.handler
-  (:require [compojure.core :refer [defroutes routes]]
+  (:require [compojure.core :refer [defroutes routes wrap-routes]]
             [guestbook.routes.home :refer [home-routes]]
-            
-            [guestbook.middleware
-             :refer [development-middleware production-middleware]]
+            [guestbook.middleware :as middleware]
             [guestbook.session :as session]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
-            [taoensso.timbre.appenders.rotor :as rotor]
+            [taoensso.timbre.appenders.3rd-party.rotor :as rotor]
             [selmer.parser :as parser]
             [environ.core :refer [env]]
-            [cronj.core :as cronj]
             [clojure.tools.nrepl.server :as nrepl]))
 
 (defonce nrepl-server (atom nil))
 
 (defroutes base-routes
-           (route/resources "/")
-           (route/not-found "Not Found"))
+  (route/resources "/")
+  (route/not-found "Not Found"))
 
 (defn start-nrepl
   "Start a network repl for debugging when the :repl-port is set in the environment."
@@ -39,22 +36,19 @@
    an app server such as Tomcat
    put any initialization code here"
   []
-  (timbre/set-config!
-    [:appenders :rotor]
-    {:min-level             :info
-     :enabled?              true
-     :async?                false ; should be always false for rotor
-     :max-message-per-msecs nil
-     :fn                    rotor/appender-fn})
 
-  (timbre/set-config!
-    [:shared-appender-config :rotor]
-    {:path "guestbook.log" :max-size (* 512 1024) :backlog 10})
+
+  (timbre/merge-config!
+    {:level     (if (env :dev) :trace :info)
+     :appenders {:rotor (rotor/rotor-appender
+                          {:path "guestbook.log"
+                           :max-size (* 512 1024)
+                           :backlog 10})}})
 
   (if (env :dev) (parser/cache-off!))
   (start-nrepl)
   ;;start the expired session cleanup job
-  (cronj/start! session/cleanup-job)
+  (session/start-cleanup-job!)
   (timbre/info "\n-=[ guestbook started successfully"
                (when (env :dev) "using the development profile") "]=-"))
 
@@ -64,13 +58,10 @@
   []
   (timbre/info "guestbook is shutting down...")
   (stop-nrepl)
-  (cronj/shutdown! session/cleanup-job)
   (timbre/info "shutdown complete!"))
 
 (def app
   (-> (routes
-        home-routes
-        
-        base-routes)
-      development-middleware
-      production-middleware))
+        (wrap-routes #'home-routes middleware/wrap-csrf)
+        #'base-routes)
+      middleware/wrap-base))
