@@ -17,6 +17,7 @@
                  [bouncer "0.3.3"]
                  [prone "0.8.2"]
                  [org.clojure/tools.nrepl "0.2.10"]
+                 [ring "1.4.0-RC2"]
                  [ring-server "0.4.0"]
                  [migratus "0.8.2"]
                  [org.clojure/java.jdbc "0.3.7"]
