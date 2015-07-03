@@ -17,7 +17,9 @@
                  [bouncer "0.3.3"]
                  [prone "0.8.2"]
                  [org.clojure/tools.nrepl "0.2.10"]
-                 [ring "1.4.0-RC2"]
+                 [cc.qbits/jet "0.6.5"]
+                 [ring "1.4.0-RC2"
+                  :exclusions [ring/ring-jetty-adapter]]
                  [ring-server "0.4.0"]
                  [migratus "0.8.2"]
                  [org.clojure/java.jdbc "0.3.7"]
