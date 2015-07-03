@@ -1,6 +1,6 @@
 (ns guestbook.core
   (:require [guestbook.handler :refer [app init destroy]]
-            [ring.adapter.jetty :refer [run-jetty]]
+            [qbits.jet.server :refer [run-jetty]]
             [ring.middleware.reload :as reload]
             [guestbook.db.migrations :as migrations]
             [taoensso.timbre :as timbre]
@@ -16,8 +16,8 @@
   (init)
   (reset! server
           (run-jetty
-            (if (env :dev) (reload/wrap-reload #'app) app)
-            {:port port
+            {:ring-handler (if (env :dev) (reload/wrap-reload #'app) app)
+             :port port
              :join? false})))
 
 (defn stop-server []
