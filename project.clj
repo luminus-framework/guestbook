@@ -1,7 +1,7 @@
 (defproject guestbook "0.1.0-SNAPSHOT"
 
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :description "Luminus Guestbook example"
+  :url "https://github.com/luminus-framework/guestbook"
 
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [selmer "0.8.4"]
