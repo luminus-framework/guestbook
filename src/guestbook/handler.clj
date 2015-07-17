@@ -13,15 +13,25 @@
 (defonce nrepl-server (atom nil))
 
 (defroutes base-routes
-  (route/resources "/")
-  (route/not-found "Not Found"))
+           (route/resources "/")
+           (route/not-found "Not Found"))
+
+(defn parse-port [port]
+  (when port
+    (cond
+      (string? port) (Integer/parseInt port)
+      (number? port) port
+      :else          (throw (Exception. (str "invalid port value: " port))))))
 
 (defn start-nrepl
-  "Start a network repl for debugging when the :repl-port is set in the environment."
+  "Start a network repl for debugging when the :nrepl-port is set in the environment."
   []
-  (when-let [port (env :repl-port)]
+  (when-let [port (env :nrepl-port)]
     (try
-      (reset! nrepl-server (nrepl/start-server :port port))
+      (->> port
+           (parse-port)
+           (nrepl/start-server :port)
+           (reset! nrepl-server))
       (timbre/info "nREPL server started on port" port)
       (catch Throwable t
         (timbre/error "failed to start nREPL" t)))))
@@ -37,7 +47,6 @@
    put any initialization code here"
   []
 
-
   (timbre/merge-config!
     {:level     (if (env :dev) :trace :info)
      :appenders {:rotor (rotor/rotor-appender
@@ -49,8 +58,10 @@
   (start-nrepl)
   ;;start the expired session cleanup job
   (session/start-cleanup-job!)
-  (timbre/info "\n-=[ guestbook started successfully"
-               (when (env :dev) "using the development profile") "]=-"))
+  (timbre/info (str
+                 "\n-=[guestbook started successfully"
+                 (when (env :dev) "using the development profile")
+                 "]=-")))
 
 (defn destroy
   "destroy will be called when your application
@@ -60,8 +71,9 @@
   (stop-nrepl)
   (timbre/info "shutdown complete!"))
 
-(def app
-  (-> (routes
-        (wrap-routes #'home-routes middleware/wrap-csrf)
-        #'base-routes)
-      middleware/wrap-base))
+(def app-base
+  (routes
+    (wrap-routes #'home-routes middleware/wrap-csrf)
+    #'base-routes))
+
+(def app (middleware/wrap-base #'app-base))
