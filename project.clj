@@ -1,10 +1,10 @@
 (defproject guestbook "0.1.0-SNAPSHOT"
 
-  :description "Luminus Guestbook example"
-  :url "https://github.com/luminus-framework/guestbook"
+  :description "FIXME: write description"
+  :url "http://example.com/FIXME"
 
   :dependencies [[org.clojure/clojure "1.7.0"]
-                 [selmer "0.8.4"]
+                 [selmer "0.8.5"]
                  [com.taoensso/timbre "4.0.2"]
                  [com.taoensso/tower "3.0.2"]
                  [markdown-clj "0.9.67"]
@@ -19,6 +19,7 @@
                  [bouncer "0.3.3"]
                  [prone "0.8.2"]
                  [org.clojure/tools.nrepl "0.2.10"]
+                 [to-jdbc-uri "0.1.0"]
                  [migratus "0.8.2"]
                  [org.clojure/java.jdbc "0.3.7"]
                  [instaparse "1.4.1"]
@@ -40,15 +41,21 @@
   {:uberjar {:omit-source true
              :env {:production true}
              :aot :all}
-   :dev {:dependencies [[ring-mock "0.1.5"]
-                        [ring/ring-devel "1.4.0"]
-                        [pjstadig/humane-test-output "0.7.0"]]
-         
-         
-         ;;when set the application start the nREPL server on load
-
-         :repl-options {:init-ns guestbook.core}
-         :injections [(require 'pjstadig.humane-test-output)
-                      (pjstadig.humane-test-output/activate!)]
-         :env {:dev        true
-               :nrepl-port 7001}}})
+   :dev           [:project/dev :profiles/dev]
+   :test          [:project/test :profiles/test]
+   :project/dev  {:dependencies [[ring/ring-mock "0.2.0"]
+                                 [ring/ring-devel "1.4.0"]
+                                 [pjstadig/humane-test-output "0.7.0"]
+                                 [mvxcvi/puget "0.8.1"]]
+                  
+                  
+                  :repl-options {:init-ns guestbook.core}
+                  :injections [(require 'pjstadig.humane-test-output)
+                               (pjstadig.humane-test-output/activate!)]
+                  ;;when :nrepl-port is set the application starts the nREPL server on load
+                  :env {:dev        true
+                        :port       3000
+                        :nrepl-port 7000}}
+   :project/test {:env {:test       true
+                        :port       3001
+                        :nrepl-port 7001}}})
