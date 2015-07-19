@@ -25,7 +25,7 @@
                  [instaparse "1.4.1"]
                  [yesql "0.5.0-rc3"]
                  [com.h2database/h2 "1.4.187"]
-                 [http-kit "2.1.19"]]
+                 [org.immutant/web "2.0.2"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "guestbook.jar"
