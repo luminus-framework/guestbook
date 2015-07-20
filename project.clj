@@ -19,11 +19,12 @@
                  [bouncer "0.3.3"]
                  [prone "0.8.2"]
                  [org.clojure/tools.nrepl "0.2.10"]
-                 [to-jdbc-uri "0.1.0"]
                  [migratus "0.8.2"]
                  [org.clojure/java.jdbc "0.3.7"]
                  [instaparse "1.4.1"]
                  [yesql "0.5.0-rc3"]
+                 [clj-dbcp "0.8.1"]
+                 [to-jdbc-uri "0.2.0"]
                  [com.h2database/h2 "1.4.187"]
                  [org.immutant/web "2.0.2"]]
 
@@ -47,8 +48,8 @@
                                  [ring/ring-devel "1.4.0"]
                                  [pjstadig/humane-test-output "0.7.0"]
                                  [mvxcvi/puget "0.8.1"]]
-                  
-                  
+
+
                   :repl-options {:init-ns guestbook.core}
                   :injections [(require 'pjstadig.humane-test-output)
                                (pjstadig.humane-test-output/activate!)]
@@ -58,4 +59,6 @@
                         :nrepl-port 7000}}
    :project/test {:env {:test       true
                         :port       3001
-                        :nrepl-port 7001}}})
+                        :nrepl-port 7001}}
+   :profiles/dev {}
+   :profiles/test {}})

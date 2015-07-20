@@ -71,6 +71,7 @@
   []
   (timbre/info "guestbook is shutting down...")
   (stop-nrepl)
+  (db/disconnect!)
   (timbre/info "shutdown complete!"))
 
 (def app-base
