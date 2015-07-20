@@ -1,6 +1,6 @@
 # guestbook
 
-FIXME
+Source code for the [guestbook tutorial](http://www.luminusweb.net/docs/guestbook.md).
 
 ## Prerequisites
 
