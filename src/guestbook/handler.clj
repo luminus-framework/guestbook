@@ -3,6 +3,7 @@
             [guestbook.routes.home :refer [home-routes]]
             [guestbook.middleware :as middleware]
             [guestbook.session :as session]
+            [guestbook.db.core :as db]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.3rd-party.rotor :as rotor]
@@ -56,6 +57,7 @@
 
   (if (env :dev) (parser/cache-off!))
   (start-nrepl)
+  (db/connect!)
   ;;start the expired session cleanup job
   (session/start-cleanup-job!)
   (timbre/info (str
