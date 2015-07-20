@@ -1,7 +1,17 @@
 pom.xml
+pom.xml.asc
 *jar
+*.class
+/.lein-*
+/.nrepl-port
+.hgignore
+.hg/
 /lib/
 /classes/
+/checkouts
 /targets/
+/target
 .lein-deps-sum
 /bin
+*.db
+*.log
