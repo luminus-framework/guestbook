@@ -2,7 +2,6 @@
   (:require [compojure.core :refer [defroutes routes wrap-routes]]
             [guestbook.routes.home :refer [home-routes]]
             [guestbook.middleware :as middleware]
-            [guestbook.session :as session]
             [guestbook.db.core :as db]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
@@ -57,12 +56,9 @@
 
   (if (env :dev) (parser/cache-off!))
   (start-nrepl)
-  (db/connect!)
-  ;;start the expired session cleanup job
-  (session/start-cleanup-job!)
   (timbre/info (str
                  "\n-=[guestbook started successfully"
-                 (when (env :dev) "using the development profile")
+                 (when (env :dev) " using the development profile")
                  "]=-")))
 
 (defn destroy
@@ -71,7 +67,6 @@
   []
   (timbre/info "guestbook is shutting down...")
   (stop-nrepl)
-  (db/disconnect!)
   (timbre/info "shutdown complete!"))
 
 (def app-base

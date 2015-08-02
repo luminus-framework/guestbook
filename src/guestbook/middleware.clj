@@ -1,23 +1,23 @@
 (ns guestbook.middleware
-  (:require [guestbook.session :as session]
-            [guestbook.layout :refer [*servlet-context*]]
+  (:require [guestbook.layout :refer [*servlet-context*]]
             [taoensso.timbre :as timbre]
             [environ.core :refer [env]]
             [clojure.java.io :as io]
             [selmer.middleware :refer [wrap-error-page]]
             [prone.middleware :refer [wrap-exceptions]]
+            [ring-ttl-session.core :refer [ttl-memory-store]]
             [ring.util.response :refer [redirect]]
+            [ring.middleware.reload :as reload]
+            [ring.middleware.webjars :refer [wrap-webjars]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
-            [ring.middleware.session-timeout :refer [wrap-idle-session-timeout]]
-            [ring.middleware.session.memory :refer [memory-store]]
             [ring.middleware.format :refer [wrap-restful-format]]))
 
 (defn wrap-servlet-context [handler]
   (fn [request]
     (binding [*servlet-context*
               (if-let [context (:servlet-context request)]
-                ;; If we're not inside a serlvet environment
+                ;; If we're not inside a servlet environment
                 ;; (for example when using mock requests), then
                 ;; .getContextPath might not exist
                 (try (.getContextPath context)
@@ -37,6 +37,7 @@
 (defn wrap-dev [handler]
   (if (env :dev)
     (-> handler
+        reload/wrap-reload
         wrap-error-page
         wrap-exceptions)
     handler))
@@ -45,18 +46,16 @@
   (wrap-anti-forgery handler))
 
 (defn wrap-formats [handler]
-  (wrap-restful-format handler :formats [:json-kw :transit-json :transit-msgpack]))
+  (wrap-restful-format handler {:formats [:json-kw :transit-json :transit-msgpack]}))
 
 (defn wrap-base [handler]
   (-> handler
       wrap-dev
-      (wrap-idle-session-timeout
-        {:timeout (* 60 30)
-         :timeout-response (redirect "/")})
       wrap-formats
       (wrap-defaults
         (-> site-defaults
             (assoc-in [:security :anti-forgery] false)
-            (assoc-in  [:session :store] (memory-store session/mem))))
+            (assoc-in  [:session :store] (ttl-memory-store (* 60 30)))))
+      wrap-webjars
       wrap-servlet-context
       wrap-internal-error))

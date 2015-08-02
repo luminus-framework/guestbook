@@ -9,7 +9,7 @@
 (defn home-page [{:keys [flash]}]
   (layout/render
    "home.html"
-   (merge {:messages (db/run db/get-messages)}
+   (merge {:messages (db/get-messages)}
           (select-keys flash [:name :message :errors]))))
 
 (defn validate-message [params]
@@ -24,8 +24,7 @@
     (-> (redirect "/")
         (assoc :flash (assoc params :errors errors)))
     (do
-      (db/run
-       db/save-message!
+      (db/save-message!
        (assoc params :timestamp (java.util.Date.)))
       (redirect "/"))))
 
