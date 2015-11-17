@@ -3,12 +3,12 @@
             [guestbook.layout :refer [error-page]]
             [guestbook.routes.home :refer [home-routes]]
             [guestbook.middleware :as middleware]
-            [guestbook.db.core :as db]
             [compojure.route :as route]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.appenders.3rd-party.rotor :as rotor]
             [selmer.parser :as parser]
-            [environ.core :refer [env]]))
+            [environ.core :refer [env]]
+            [guestbook.config :refer [defaults]]))
 
 (defn init
   "init will be called once when
@@ -18,17 +18,12 @@
   []
 
   (timbre/merge-config!
-    {:level     (if (env :dev) :trace :info)
+    {:level     ((fnil keyword :info) (env :log-level))
      :appenders {:rotor (rotor/rotor-appender
-                          {:path "guestbook.log"
+                          {:path (or (env :log-path) "guestbook.log")
                            :max-size (* 512 1024)
                            :backlog 10})}})
-
-  (if (env :dev) (parser/cache-off!))
-  (timbre/info (str
-                 "\n-=[guestbook started successfully"
-                 (when (env :dev) " using the development profile")
-                 "]=-")))
+  ((:init defaults)))
 
 (defn destroy
   "destroy will be called when your application
@@ -42,7 +37,7 @@
     (wrap-routes #'home-routes middleware/wrap-csrf)
     (route/not-found
       (:body
-       (error-page {:status 404
-                    :title "page not found"})))))
+        (error-page {:status 404
+                     :title "page not found"})))))
 
 (def app (middleware/wrap-base #'app-routes))

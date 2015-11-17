@@ -33,34 +33,36 @@
              (reset! nrepl-server))
         (timbre/info "nREPL server started on port" port)
         (catch Throwable t
-          (timbre/error "failed to start nREPL" t))))))
+          (timbre/error t "failed to start nREPL"))))))
 
 (defn http-port [port]
   (parse-port (or port (env :port) 3000)))
 
-(defonce server (atom nil))
+(defonce http-server (atom nil))
 
 (defn start-http-server [port]
   (init)
-  (reset! server (immutant/run app :port port)))
+  (reset! http-server (immutant/run app :host "0.0.0.0" :port port)))
 
 (defn stop-http-server []
-  (when @server
+  (when @http-server
     (destroy)
-    (immutant/stop @server)
-    (reset! server nil)))
+    (immutant/stop @http-server)
+    (reset! http-server nil)))
 
 (defn stop-app []
   (stop-nrepl)
-  (stop-http-server))
+  (stop-http-server)
+  (shutdown-agents))
 
 (defn start-app [[port]]
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app))
   (start-nrepl)
   (start-http-server (http-port port))
-  (timbre/info "server started on port:" (:port @server)))
+  (timbre/info "server started on port:" (:port @http-server)))
 
 (defn -main [& args]
   (cond
     (some #{"migrate" "rollback"} args) (migrations/migrate args)
     :else (start-app args)))
+  
