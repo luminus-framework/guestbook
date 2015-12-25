@@ -1,8 +1,8 @@
 (ns guestbook.config
-  (:require [taoensso.timbre :as timbre]))
+  (:require [clojure.tools.logging :as log]))
 
 (def defaults
   {:init
    (fn []
-     (timbre/info "\n-=[guestbook started successfully]=-"))
+     (log/info "\n-=[guestbook started successfully]=-"))
    :middleware identity})
