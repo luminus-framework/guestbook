@@ -1,7 +1,7 @@
 (ns guestbook.middleware
   (:require [guestbook.layout :refer [*app-context* error-page]]
             [clojure.tools.logging :as log]
-            [environ.core :refer [env]]
+            [config.core :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
             [immutant.web.middleware :refer [wrap-session]]
             [ring.middleware.webjars :refer [wrap-webjars]]
@@ -45,7 +45,13 @@
         :title "Invalid anti-forgery token"})}))
 
 (defn wrap-formats [handler]
-  (wrap-restful-format handler {:formats [:json-kw :transit-json :transit-msgpack]}))
+  (let [wrapped (wrap-restful-format
+                  handler
+                  {:formats [:json-kw :transit-json :transit-msgpack]})]
+    (fn [request]
+      ;; disable wrap-formats for websockets
+      ;; since they're not compatible with this middleware
+      ((if (:websocket? request) handler wrapped) request))))
 
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)

@@ -1,5 +1,7 @@
 # guestbook
 
+generated using Luminus version 2.9.x
+
 FIXME
 
 ## Prerequisites
@@ -10,14 +12,10 @@ You will need [Leiningen][1] 2.0 or above installed.
 
 ## Running
 
-To run the migrations and create the database tables run:
-
-    lein run migrate
-
 To start a web server for the application, run:
-    
+
     lein run
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2016 FIXME

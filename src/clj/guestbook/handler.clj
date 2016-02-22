@@ -5,9 +5,10 @@
             [guestbook.middleware :as middleware]
             [clojure.tools.logging :as log]
             [compojure.route :as route]
-            [environ.core :refer [env]]
+            [config.core :refer [env]]
             [guestbook.config :refer [defaults]]
-            [mount.core :as mount]))
+            [mount.core :as mount]
+            [luminus.logger :as logger]))
 
 (defn init
   "init will be called once when
@@ -15,8 +16,7 @@
    an app server such as Tomcat
    put any initialization code here"
   []
-  (when-let [config (:log-config env)]
-    (org.apache.log4j.PropertyConfigurator/configure config))
+  (logger/init env)
   (doseq [component (:started (mount/start))]
     (log/info component "started"))
   ((:init defaults)))
