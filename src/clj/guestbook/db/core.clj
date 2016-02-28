@@ -4,15 +4,13 @@
     [mount.core :refer [defstate]]
     [guestbook.config :refer [env]]))
 
-(def pool-spec
-  {:datasource
-   (doto (org.h2.jdbcx.JdbcDataSource.)
-     (.setURL (:database-url env))
-     (.setUser "")
-     (.setPassword ""))})
-
 (defstate ^:dynamic *db*
-          :start (conman/connect! pool-spec)
+          :start (conman/connect!
+                   {:datasource
+                    (doto (org.h2.jdbcx.JdbcDataSource.)
+                          (.setURL (:database-url env))
+                          (.setUser "")
+                          (.setPassword ""))})
           :stop (conman/disconnect! *db*))
 
 (conman/bind-connection *db* "sql/queries.sql")

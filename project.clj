@@ -20,7 +20,7 @@
                  [ring/ring-defaults "0.1.5"]
                  [ring "1.4.0" :exclusions [ring/ring-jetty-adapter]]
                  [mount "0.1.10-SNAPSHOT"]
-                 [cprop "0.1.5-SNAPSHOT"]
+                 [cprop "0.1.5"]
                  [org.clojure/tools.cli "0.3.3"]
                  [luminus-nrepl "0.1.3"]
                  [migratus "0.8.13"]
@@ -39,7 +39,7 @@
   :main guestbook.core
   :migratus {:store :database}
 
-  :plugins [[lein-cprop "1.0.0"]
+  :plugins [[lein-cprop "1.0.1"]
             [migratus-lein "0.2.6"]]
   :profiles
   {:uberjar {:omit-source true
