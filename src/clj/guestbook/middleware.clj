@@ -19,7 +19,7 @@
                 ;; (for example when using mock requests), then
                 ;; .getContextPath might not exist
                 (try (.getContextPath ^ServletContext context)
-                     (catch IllegalArgumentException _ context))
+                  (catch IllegalArgumentException _ context))
                 ;; if the context is not specified in the request
                 ;; we check if one has been specified in the environment
                 ;; instead

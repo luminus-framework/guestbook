@@ -1,7 +1,5 @@
 (ns user
-  (:require [guestbook.handler :refer [app init destroy]]
-            [mount.core :as mount]
-            [guestbook.config :refer [env]]
+  (:require [mount.core :as mount]
             guestbook.core))
 
 (defn start []

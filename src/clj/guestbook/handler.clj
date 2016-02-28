@@ -1,29 +1,9 @@
 (ns guestbook.handler
-  (:require [compojure.core :refer [defroutes routes wrap-routes]]
+  (:require [compojure.core :refer [routes wrap-routes]]
             [guestbook.layout :refer [error-page]]
             [guestbook.routes.home :refer [home-routes]]
             [guestbook.middleware :as middleware]
-            [clojure.tools.logging :as log]
-            [compojure.route :as route]
-            [guestbook.config :refer [env]]
-            [guestbook.env :refer [defaults]]
-            [mount.core :as mount]
-            [luminus.logger :as logger]))
-
-(defn init
-  "init will be called once when
-   app is deployed as a servlet on
-   an app server such as Tomcat
-   put any initialization code here"
-  []
-  (logger/init env)
-  ((:init defaults)))
-
-(defn destroy
-  "destroy will be called when your application
-   shuts down, put any clean up code here"
-  []
-  (log/info "shutdown complete!"))
+            [compojure.route :as route]))
 
 (def app-routes
   (routes

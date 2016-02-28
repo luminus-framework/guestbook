@@ -19,20 +19,20 @@
                  [ring-webjars "0.1.1"]
                  [ring/ring-defaults "0.1.5"]
                  [ring "1.4.0" :exclusions [ring/ring-jetty-adapter]]
-                 [mount "0.1.10-SNAPSHOT"]
+                 [mount "0.1.10"]
                  [cprop "0.1.5"]
                  [org.clojure/tools.cli "0.3.3"]
                  [luminus-nrepl "0.1.3"]
-                 [migratus "0.8.13"]
+                 [luminus-migrations "0.1.0"]
                  [conman "0.4.5"]
                  [com.h2database/h2 "1.4.191"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
-                 [luminus-immutant "0.1.2"]
-                 [luminus-log4j "0.1.2"]]
+                 [luminus-immutant "0.1.3"]
+                 [luminus-log4j "0.1.3"]]
 
   :min-lein-version "2.0.0"
 
-  :jvm-opts ["-server" "-Dconf=user.edn"]
+  :jvm-opts ["-server" "-Dconf=.lein-env"]
   :source-paths ["src/clj"]
   :resource-paths ["resources"]
 
