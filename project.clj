@@ -5,8 +5,7 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [selmer "1.0.0"]
-                 [markdown-clj "0.9.85"]
-                 [luminus/config "0.5"]
+                 [markdown-clj "0.9.86"]
                  [ring-middleware-format "0.7.0"]
                  [metosin/ring-http-response "0.6.5"]
                  [bouncer "1.0.0"]
@@ -20,29 +19,31 @@
                  [ring-webjars "0.1.1"]
                  [ring/ring-defaults "0.1.5"]
                  [ring "1.4.0" :exclusions [ring/ring-jetty-adapter]]
-                 [mount "0.1.9"]
-                 [luminus-nrepl "0.1.2"]
-                 [migratus "0.8.10"]
-                 [conman "0.4.2"]
+                 [mount "0.1.10-SNAPSHOT"]
+                 [cprop "0.1.5-SNAPSHOT"]
+                 [org.clojure/tools.cli "0.3.3"]
+                 [luminus-nrepl "0.1.3"]
+                 [migratus "0.8.13"]
+                 [conman "0.4.5"]
                  [com.h2database/h2 "1.4.191"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
-                 [luminus-immutant "0.1.1"]
+                 [luminus-immutant "0.1.2"]
                  [luminus-log4j "0.1.2"]]
 
   :min-lein-version "2.0.0"
 
-  :jvm-opts ["-server"]
+  :jvm-opts ["-server" "-Dconf=user.edn"]
   :source-paths ["src/clj"]
   :resource-paths ["resources"]
 
   :main guestbook.core
   :migratus {:store :database}
 
-  :plugins [[lein-environ "1.0.1"]
-            [migratus-lein "0.2.2"]]
+  :plugins [[lein-cprop "1.0.0"]
+            [migratus-lein "0.2.6"]]
   :profiles
   {:uberjar {:omit-source true
-             :env {:production true}
+
              :aot :all
              :uberjar-name "guestbook.jar"
              :source-paths ["env/prod/clj"]
@@ -54,19 +55,13 @@
                                  [ring/ring-devel "1.4.0"]
                                  [pjstadig/humane-test-output "0.7.1"]
                                  [mvxcvi/puget "1.0.0"]]
-                  
-                  
+
+
                   :source-paths ["env/dev/clj" "test/clj"]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user}
                   :injections [(require 'pjstadig.humane-test-output)
-                               (pjstadig.humane-test-output/activate!)]
-                  ;;when :nrepl-port is set the application starts the nREPL server on load
-                  :env {:dev        true
-                        :port       3000
-                        :nrepl-port 7000}}
-   :project/test {:env {:test       true
-                        :port       3001
-                        :nrepl-port 7001}}
+                               (pjstadig.humane-test-output/activate!)]}
+   :project/test {:resource-paths ["env/dev/resources" "env/test/resources"]}
    :profiles/dev {}
    :profiles/test {}})

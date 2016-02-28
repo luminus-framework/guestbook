@@ -5,8 +5,8 @@
             [guestbook.middleware :as middleware]
             [clojure.tools.logging :as log]
             [compojure.route :as route]
-            [config.core :refer [env]]
-            [guestbook.config :refer [defaults]]
+            [guestbook.config :refer [env]]
+            [guestbook.env :refer [defaults]]
             [mount.core :as mount]
             [luminus.logger :as logger]))
 
@@ -17,17 +17,12 @@
    put any initialization code here"
   []
   (logger/init env)
-  (doseq [component (:started (mount/start))]
-    (log/info component "started"))
   ((:init defaults)))
 
 (defn destroy
   "destroy will be called when your application
    shuts down, put any clean up code here"
   []
-  (log/info "guestbook is shutting down...")
-  (doseq [component (:stopped (mount/stop))]
-    (log/info component "stopped"))
   (log/info "shutdown complete!"))
 
 (def app-routes

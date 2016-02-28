@@ -3,14 +3,16 @@
             [guestbook.db.migrations :as migrations]
             [clojure.test :refer :all]
             [clojure.java.jdbc :as jdbc]
-            [config.core :refer [env]]
+            [guestbook.config :refer [env]]
             [conman.core :refer [with-transaction]]
             [mount.core :as mount]))
 
 (use-fixtures
   :once
   (fn [f]
-    (mount/start #'guestbook.db.core/*db*)
+    (mount/start
+      #'guestbook.config/env
+      #'guestbook.db.core/*db*)
     (migrations/migrate ["migrate"])
     (f)))
 

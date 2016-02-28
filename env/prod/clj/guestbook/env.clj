@@ -1,4 +1,4 @@
-(ns guestbook.config
+(ns guestbook.env
   (:require [clojure.tools.logging :as log]))
 
 (def defaults

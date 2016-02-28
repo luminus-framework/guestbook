@@ -2,7 +2,7 @@
   (:require
     [conman.core :as conman]
     [mount.core :refer [defstate]]
-    [config.core :refer [env]]))
+    [guestbook.config :refer [env]]))
 
 (def pool-spec
   {:datasource
