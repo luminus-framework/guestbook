@@ -20,7 +20,7 @@
                  [ring/ring-defaults "0.1.5"]
                  [ring "1.4.0" :exclusions [ring/ring-jetty-adapter]]
                  [mount "0.1.10-SNAPSHOT"]
-                 [cprop "0.1.5"]
+                 [cprop "0.1.6-SNAPSHOT"]
                  [org.clojure/tools.cli "0.3.3"]
                  [luminus-nrepl "0.1.3"]
                  [migratus "0.8.13"]
