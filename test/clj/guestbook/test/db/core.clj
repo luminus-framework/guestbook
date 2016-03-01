@@ -13,7 +13,7 @@
     (mount/start
       #'guestbook.config/env
       #'guestbook.db.core/*db*)
-    (migrations/migrate ["migrate"] (-> env :database :url))
+    (migrations/migrate ["migrate"] (env :database-url))
     (f)))
 
 (deftest test-users

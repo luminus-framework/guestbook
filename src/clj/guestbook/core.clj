@@ -52,7 +52,7 @@
     (some #{"migrate" "rollback"} args)
     (do
       (mount/start #'guestbook.config/env)
-      (migrations/migrate args (-> env :database :url))
+      (migrations/migrate args (env :database-url))
       (System/exit 0))
     :else
     (start-app args)))
