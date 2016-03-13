@@ -2,8 +2,8 @@
   (:require [compojure.core :refer [routes wrap-routes]]
             [guestbook.layout :refer [error-page]]
             [guestbook.routes.home :refer [home-routes]]
-            [guestbook.middleware :as middleware]
-            [compojure.route :as route]))
+            [compojure.route :as route]
+            [guestbook.middleware :as middleware]))
 
 (def app-routes
   (routes

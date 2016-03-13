@@ -1,11 +1,7 @@
 html,
 body {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  height: 100%;
-  line-height: 1.4em;
-	background: #eaeaea;
-	width: 520px;
-	margin: 0 auto;
+    height: 100%;
 }
 .navbar {
   margin-bottom: 10px;
@@ -35,33 +31,3 @@ body {
   }
 }
 
-.messages {
-  background: white;
-  width: 520px;
-}
-ul {
-	list-style: none;
-}
-
-ul.messages li {
-	position: relative;
-	font-size: 16px;
-	padding: 5px;
-	border-bottom: 1px dotted #ccc;
-}
-
-li:last-child {
-	border-bottom: none;
-}
-
-li time {
-	font-size: 12px;
-	padding-bottom: 20px;
-}
-
-form, .error {
-	padding: 30px;
-	margin-bottom: 50px;
-	position: relative;
-  background: white;
-}

@@ -1,8 +1,8 @@
 (ns guestbook.middleware
   (:require [guestbook.layout :refer [*app-context* error-page]]
             [clojure.tools.logging :as log]
-            [guestbook.config :refer [env]]
             [guestbook.env :refer [defaults]]
+            [guestbook.config :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
             [immutant.web.middleware :refer [wrap-session]]
             [ring.middleware.webjars :refer [wrap-webjars]]
@@ -19,7 +19,7 @@
                 ;; (for example when using mock requests), then
                 ;; .getContextPath might not exist
                 (try (.getContextPath ^ServletContext context)
-                  (catch IllegalArgumentException _ context))
+                     (catch IllegalArgumentException _ context))
                 ;; if the context is not specified in the request
                 ;; we check if one has been specified in the environment
                 ;; instead
