@@ -15,7 +15,7 @@
     (migrations/migrate ["migrate"] (env :database-url))
     (f)))
 
-(deftest test-users
+(deftest test-message
   (jdbc/with-db-transaction [t-conn *db*]
     (jdbc/db-set-rollback-only! t-conn)
     (let [message {:name "test"
