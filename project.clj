@@ -27,7 +27,7 @@
                  [conman "0.4.5"]
                  [com.h2database/h2 "1.4.191"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
-                 [luminus-immutant "0.1.3"]
+                 [luminus-immutant "0.1.9"]
                  [luminus-log4j "0.1.3"]]
 
   :min-lein-version "2.0.0"
