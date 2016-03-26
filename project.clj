@@ -24,7 +24,7 @@
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
                  [luminus-immutant "0.1.9"]
                  [luminus-migrations "0.1.0"]
-                 [conman "0.4.6"]
+                 [conman "0.4.7"]
                  [com.h2database/h2 "1.4.191"]
                  [luminus-log4j "0.1.3"]]
 
