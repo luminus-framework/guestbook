@@ -6,8 +6,6 @@
             [guestbook.config :refer [env]]
             [clojure.tools.cli :refer [parse-opts]]
             [clojure.tools.logging :as log]
-            [guestbook.env :refer [defaults]]
-            [luminus.logger :as logger]
             [mount.core :as mount])
   (:gen-class))
 
@@ -34,6 +32,7 @@
                 (when repl-server
                   (repl/stop repl-server)))
 
+
 (defn stop-app []
   (doseq [component (:stopped (mount/stop))]
     (log/info component "stopped"))
@@ -45,8 +44,6 @@
                         mount/start-with-args
                         :started)]
     (log/info component "started"))
-  (logger/init (:log-config env))
-  ((:init defaults))
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
 (defn -main [& args]
@@ -54,8 +51,8 @@
     (some #{"migrate" "rollback"} args)
     (do
       (mount/start #'guestbook.config/env)
-      (migrations/migrate args (env :database-url))
+      (migrations/migrate args (select-keys env [:database-url]))
       (System/exit 0))
     :else
     (start-app args)))
-
+  

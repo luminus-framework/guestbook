@@ -1,14 +1,14 @@
 (ns guestbook.middleware
-  (:require [guestbook.layout :refer [*app-context* error-page]]
+  (:require [guestbook.env :refer [defaults]]
             [clojure.tools.logging :as log]
-            [guestbook.env :refer [defaults]]
+            [guestbook.layout :refer [*app-context* error-page]]
+            [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
+            [ring.middleware.webjars :refer [wrap-webjars]]
+            [ring.middleware.format :refer [wrap-restful-format]]
             [guestbook.config :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
             [immutant.web.middleware :refer [wrap-session]]
-            [ring.middleware.webjars :refer [wrap-webjars]]
-            [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
-            [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
-            [ring.middleware.format :refer [wrap-restful-format]])
+            [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
   (:import [javax.servlet ServletContext]))
 
 (defn wrap-context [handler]
@@ -55,7 +55,6 @@
 
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)
-      wrap-formats
       wrap-webjars
       wrap-flash
       (wrap-session {:cookie-attrs {:http-only true}})

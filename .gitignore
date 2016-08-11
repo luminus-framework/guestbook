@@ -8,5 +8,5 @@ pom.xml
 /.lein-*
 profiles.clj
 /.env
- .nrepl-port 
+.nrepl-port
 /log
