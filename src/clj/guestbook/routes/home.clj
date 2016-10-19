@@ -37,4 +37,3 @@
   (GET "/" request (home-page request))
   (POST "/" request (save-message! request))
   (GET "/about" [] (about-page)))
-

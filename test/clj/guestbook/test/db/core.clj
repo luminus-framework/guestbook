@@ -26,4 +26,3 @@
         (is (= 1 (count result)))
         (is (= message (dissoc (first result) :id))))))
   (is (empty? (db/get-messages))))
-
