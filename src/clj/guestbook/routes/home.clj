@@ -4,8 +4,7 @@
             [ring.util.http-response :as response]
             [clojure.java.io :as io]
             [guestbook.db.core :as db]
-            [bouncer.core :as b]
-            [bouncer.validators :as v]))
+            [struct.core :as st]))
 
 
 (defn home-page [{:keys [flash]}]
@@ -14,12 +13,17 @@
     (merge {:messages (db/get-messages)}
            (select-keys flash [:name :message :errors]))))
 
+(def message-schema
+  [[:name st/required st/string]
+   [:message
+    st/required
+    st/string
+    {:message "message must contain at least 10 characters"
+     :validate #(> (count %) 9)}]])
+
 (defn validate-message [params]
   (first
-    (b/validate
-      params
-      :name v/required
-      :message [v/required [v/min-count 10]])))
+    (st/validate params message-schema)))
 
 (defn save-message! [{:keys [params]}]
   (if-let [errors (validate-message params)]

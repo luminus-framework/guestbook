@@ -3,11 +3,11 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[bouncer "1.0.0"]
-                 [com.h2database/h2 "1.4.192"]
+  :dependencies [[com.h2database/h2 "1.4.192"]
                  [compojure "1.5.1"]
                  [conman "0.6.2"]
                  [cprop "0.1.9"]
+                 [funcool/struct "1.0.0"]
                  [luminus-immutant "0.2.2"]
                  [luminus-migrations "0.2.8"]
                  [luminus-nrepl "0.1.4"]
@@ -55,7 +55,7 @@
                                  [ring/ring-devel "1.5.0"]
                                  [pjstadig/humane-test-output "0.8.1"]]
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.14.0"]]
-                  
+
                   :source-paths ["env/dev/clj" "test/clj"]
                   :resource-paths ["env/dev/resources"]
                   :repl-options {:init-ns user}
